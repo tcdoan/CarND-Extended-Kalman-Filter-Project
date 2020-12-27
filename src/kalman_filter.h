@@ -5,14 +5,7 @@
 
 class KalmanFilter {
  public:
-  /**
-   * Constructor
-   */
   KalmanFilter();
-
-  /**
-   * Destructor
-   */
   virtual ~KalmanFilter();
 
   /**

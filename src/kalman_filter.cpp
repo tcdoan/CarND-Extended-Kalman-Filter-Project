@@ -9,7 +9,6 @@ using Eigen::VectorXd;
  */
 
 KalmanFilter::KalmanFilter() {}
-
 KalmanFilter::~KalmanFilter() {}
 
 void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
@@ -26,16 +25,37 @@ void KalmanFilter::Predict() {
   /**
    * TODO: predict the state
    */
+  x_ = F_ * x_;
+  MatrixXd Ft = F_.transpose();
+  P_ = F_ * P_ * Ft + Q_; 
 }
 
 void KalmanFilter::Update(const VectorXd &z) {
   /**
    * TODO: update the state by using Kalman Filter equations
    */
+  
 }
 
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
   /**
    * TODO: update the state by using Extended Kalman Filter equations
    */
+  float px = x_[0];
+  float px2 = px*px;
+
+  float py = x_[1];
+  float py2 = py*py;
+  float pxy2 = px2 + py2;
+
+  float vx = x_[2];
+  float vy = x_[3];
+
+  float rho =  sqrt(pxy2);
+  float phi =  atan(py/px);
+  float rhodot =  (px*vx + py*vy)/sqrt(pxy2);
+  VectorXd hx(3);
+  hx << rho, phi, rhodot;
+
+  VectorXd y = z-hx;
 }
