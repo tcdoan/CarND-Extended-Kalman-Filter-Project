@@ -40,20 +40,14 @@ FusionEKF::FusionEKF() {
   this->ekf_.Q_ = MatrixXd(4, 4);
 }
 
-/**
- * Destructor.
- */
 FusionEKF::~FusionEKF() {}
 
 void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
-  /**
-   * Initialization
-   */
   if (!is_initialized_) {
     /**
      * TODO: Initialize the state ekf_.x_ with the first measurement.
      * TODO: Create the covariance matrix.
-     * You'll need to convert radar from polar to cartesian coordinates.
+     * Need to convert radar from polar to cartesian coordinates.
      */
 
     // first measurement
@@ -64,7 +58,14 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
       // TODO: Convert radar from polar to cartesian coordinates 
       //         and initialize state.
+      float rho = measurement_pack.raw_measurements_[0];
+      float phi = measurement_pack.raw_measurements_[1];
+      float py = sin(phi)*rho;
+      float px = cos(phi)*rho;
 
+      // TODO: Can we find vx, vy from rho, phi and raw_measurements_[2]
+      float vx = 0;
+      float vy = 0;
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
       // TODO: Initialize state.
@@ -74,6 +75,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       ekf_.x_[3] = 0;
     }
 
+  // this->ekf_.Init(...);
     // done initializing, no need to predict or update
     is_initialized_ = true;
     return;
