@@ -43,10 +43,19 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
    float pxy2 = px2 + py2;
    float pxy2cube = pxy2*pxy2*pxy2;
 
+   MatrixXd Hj(3, 4);
+   if (Tools::isEqual(px, 0.0) || Tools::isEqual(py, 0.0) || Tools::isEqual(pxy2, 0.0))
+   {
+    std::cout << "Invalid input. x_state[0] or x_state[1] is close to zero." << std::endl;
+    Hj << 0, 0, 0, 0,
+          0, 0, 0, 0,
+          0, 0, 0, 0;
+    return Hj;
+   }
+
    float vx = x_state[2];
    float vy = x_state[3];
 
-   MatrixXd Hj(3, 4);
    float h11 = px/sqrt(pxy2);
    float h12 = py/sqrt(pxy2);
    float h21 = -py/pxy2;
